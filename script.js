@@ -1,6 +1,7 @@
 import { key } from './config.js';
 
-let api;
+let weather;
+let forecast;
 
 //LOADING
 const loading = document.querySelector('#loading')
@@ -19,7 +20,8 @@ navigator.geolocation.getCurrentPosition(ifSucces, ifError)
 function ifSucces(position){
     setLoading(); 
     const {latitude, longitude} = position.coords;
-    api = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}&units=metric`
+    weather = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}&units=metric`
+    forecast = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${key}&units=metric`
     fetchData()
 }
 function ifError(){
@@ -38,14 +40,16 @@ search.addEventListener("keyup", e =>{
     }
 })
 function requestApi(city){
-    api = `https://api.openweathermap.org/data/2.5/weather?q=${city}&units=metric&appid=${key}`;
+    weather = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=metric`;
+    forecast = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${key}&units=metric`;
     setLoading(); 
     fetchData();
 }
 
 //RESPONSE
 function fetchData(){
-    fetch(api).then(response => response.json()).then(data => weatherData(data)).then(clearLoading());
+    fetch(weather).then(response => response.json()).then(data => weatherData(data)).then(clearLoading());
+    fetch(forecast).then(response => response.json()).then(data => forecastData(data));
 }
 function weatherData(data){
     if(data.cod == "404"){
@@ -62,4 +66,7 @@ function weatherData(data){
         document.querySelector('#weatherDiv').style.display = 'block';
     }
     search.value = "";
+}
+function forecastData(data) {
+    console.log(data)
 }
