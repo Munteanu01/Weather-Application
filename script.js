@@ -68,5 +68,27 @@ function weatherData(data){
     search.value = "";
 }
 function forecastData(data) {
-    console.log(data)
-}
+    const groupedData = data.list.reduce((acc, item) => {
+      const [date, hour] = item.dt_txt.split(' ')
+      acc[date] = acc[date] || {}
+      acc[date][hour.slice(0, 5)] = acc[date][hour.slice(0, 5)] || []
+      acc[date][hour.slice(0, 5)].push({temp: item.main.temp, 
+                                        humidity: item.main.humidity,
+                                        feels_like: item.main.feels_like,
+                                        description: item.weather[0].description})
+      return acc
+    }, {})
+    document.querySelector('#daysDiv').innerHTML = Object.entries(groupedData).map(([date, hours]) => `
+      <p>Date: ${date}</p>
+      ${Object.entries(hours).map(([hour, data]) => `
+        <p class='hour'>
+          Hour: ${hour} 
+          <p class='hourData'>
+          Temperature: ${data[0].temp}C / <br>
+          Feels like: ${data[0].feels_like}C /<br>
+          Humidity: ${data[0].humidity}% /<br>
+          Description: ${data[0].description} 
+          </p>
+        </p>`).join('')}
+    `).join('')
+  }
