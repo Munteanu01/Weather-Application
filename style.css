@@ -28,3 +28,6 @@ li{
     display: flex;
     margin-right: 50px;
 }
+.weatherSticker{
+    max-width: 100px;
+}

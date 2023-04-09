@@ -1,11 +1,11 @@
 import { key } from './config.js';
 
-const daysDiv = document.querySelector('#daysDiv')
-const hoursDiv = document.querySelector('#hoursDiv')
-const loading = document.querySelector('#loading')
-const locationButton = document.querySelector('#locationButton') 
-const search = document.querySelector('#search')
-const favoritesList = document.querySelector('#favoritesList');
+const daysDiv = document.getElementById('daysDiv')
+const hoursDiv = document.getElementById('hoursDiv')
+const loading = document.getElementById('loading')
+const locationButton = document.getElementById('locationButton') 
+const search = document.getElementById('search')
+const favoritesList = document.getElementById('favoritesList');
 let weather;
 let forecast;
 
@@ -14,8 +14,8 @@ function setLoading() {
     loading.style.display = 'block';
     hoursDiv.innerHTML = ''
     daysDiv.innerHTML = ''
-    document.querySelector('#weatherDiv').style.display = 'none';
-    document.querySelector('#infoText').innerText = '';
+    document.getElementById('weatherDiv').style.display = 'none';
+    document.getElementById('infoText').innerText = '';
 }
 function clearLoading() {
     loading.style.display = 'none';
@@ -34,8 +34,7 @@ function ifError(){
     clearLoading();
     alert(`Something didn't work well :(\nCheck if you allowed the website to access your location`);
 }
-locationButton.addEventListener('click', ()=> {
-    setLoading(); 
+locationButton.addEventListener('click', ()=> { 
     navigator.geolocation.getCurrentPosition(ifSucces, ifError)
 })
 
@@ -47,8 +46,8 @@ search.addEventListener("keyup", e =>{
 })
 function requestApi(city){
     weather = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=metric`;
-    forecast = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${key}&units=metric`;
-    setLoading(); 
+    forecast = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${key}&units=metric`; 
+    hoursDiv.innerHTML = ''
     fetchData();
 }
 
@@ -59,69 +58,75 @@ function fetchData(){
 }
 function weatherData(data){
     if(data.cod == "404"){
-        document.querySelector('#infoText').innerText = `${search.value} isn't a valid city name`;
-        document.querySelector('#weatherDiv').style.display = 'none';
+        document.getElementById('infoText').innerText = `${search.value} isn't a valid city name`;
+        document.getElementById('weatherDiv').style.display = 'none';
         daysDiv.innerHTML = ''
     }else{
         clearLoading();
-        document.querySelector('#locationName').innerText = `You are currently in ${data.name}, ${data.sys.country}`
-        document.querySelector('#time').innerText = 'Now'
-        document.querySelector('#temp').innerText = `${Math.round(data.main.temp)}  C`
-        document.querySelector('#humidity').innerText = `${data.main.humidity}  % humidity`
-        document.querySelector('#feelsLike').innerText = `Feels like ${Math.round(data.main.feels_like)} C`
-        document.querySelector('#description').innerText = `Description: ${data.weather[0].description}`
-        document.querySelector('#weatherSticker').innerHTML = `   <img src="http://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png" />`
-        document.querySelector('#infoText').innerText = ''
-        document.querySelector('#weatherDiv').style.display = 'block';
+        document.getElementById('locationName').innerText = `You are currently in ${data.name}, ${data.sys.country}`
+        document.getElementById('time').innerText = 'Now'
+        document.getElementById('temp').innerText = `${Math.round(data.main.temp)}  C`
+        document.getElementById('humidity').innerText = `${data.main.humidity}  % humidity`
+        document.getElementById('feelsLike').innerText = `Feels like ${Math.round(data.main.feels_like)} C`
+        document.getElementById('description').innerText = `Description: ${data.weather[0].description}`
+        document.getElementById('weatherSticker').innerHTML = `<img src="http://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png" />`
+        document.getElementById('infoText').innerText = ''
+        document.getElementById('weatherDiv').style.display = 'block';
     }
     search.value = "";
 }
 function forecastData(data) {
     const groupedData = data.list.reduce((acc, item) => {
-      const [date, hour] = item.dt_txt.split(' ')
-      acc[date] = acc[date] || {}
-      acc[date][hour.slice(0, 5)] = acc[date][hour.slice(0, 5)] || []
-      acc[date][hour.slice(0, 5)].push({temp: Math.round(item.main.temp), 
-                                        humidity: item.main.humidity,
-                                        feels_like: Math.round(item.main.feels_like),
-                                        description: item.weather[0].description,
-                                        icon: item.weather[0].icon})
-      return acc
+        const [date, hour] = item.dt_txt.split(' ')
+        acc[date] = acc[date] || {}
+        acc[date][hour.slice(0, 5)] = acc[date][hour.slice(0, 5)] || []
+        acc[date][hour.slice(0, 5)].push({
+            temp: Math.round(item.main.temp),
+            humidity: item.main.humidity,
+            feels_like: Math.round(item.main.feels_like),
+            description: item.weather[0].description,
+            icon: item.weather[0].icon
+        })
+        return acc
     }, {})
-    
-    daysDiv.innerHTML = Object.entries(groupedData).map(([date]) => `
-        <p class="date">${date}</p>
-    `).join('')
 
+    daysDiv.innerHTML = Object.entries(groupedData).map(([date]) => `<p class="date">${date}</p>`).join('')
     daysDiv.querySelectorAll('.date').forEach(day => {
         day.addEventListener('click', () => {
-            const hours = groupedData[day.textContent]
-            hoursDiv.innerHTML = Object.entries(hours).map(([hour, data]) => `
-              <div class='hoursDivChildren'>
-                <p>${hour}</p>
-                <p>${data[0].temp}C</p>
-              </div>
-            `).join('')
-            hoursDiv.querySelectorAll('.hoursDivChildren').forEach(hoursDivChild => {
-                const weatherSticker = document.querySelector('#weatherSticker');
-                const img = document.createElement('img');
-                hoursDivChild.addEventListener('click', () => {
-                    const hour = hoursDivChild.querySelector('p:first-child').textContent
-                    const data = hours[hour][0]
-                    const date = day.textContent
-                    img.src = `http://openweathermap.org/img/wn/${data.icon}@4x.png`;
-                    img.addEventListener('load', () => {
-                        weatherSticker.innerHTML = `<img src="${img.src}" />`;
-                    })
-                    document.querySelector('#time').innerText = `${date}: ${hour}`
-                    document.querySelector('#temp').innerText = `${Math.round(data.temp)}  C`
-                    document.querySelector('#humidity').innerText = `${data.humidity}  % humidity`
-                    document.querySelector('#feelsLike').innerText = `Feels like ${Math.round(data.feels_like)} C`
-                    document.querySelector('#description').innerText = `Description: ${data.description}`
-                });
-            })
-        })
-    })   
+            if (hoursDiv.dataset.selectedDay === day.textContent) {
+                hoursDiv.innerHTML = ''
+                hoursDiv.dataset.selectedDay = ''
+            } else {
+                const hours = groupedData[day.textContent]
+                hoursDiv.innerHTML = Object.entries(hours).map(([hour, data]) => `
+                    <div class='hoursDivChildren'>
+                        <p>${hour}</p>
+                        <img class="weatherSticker" src="http://openweathermap.org/img/wn/${data[0].icon}@4x.png" />
+                        <p>${data[0].temp}C</p>
+                    </div>
+                `).join('')
+                hoursDiv.dataset.selectedDay = day.textContent
+                hoursDiv.querySelectorAll('.hoursDivChildren').forEach(hoursDivChild => {
+                    const weatherSticker = document.getElementById('weatherSticker');
+                    const img = document.createElement('img');
+                    hoursDivChild.addEventListener('click', () => {
+                        const hour = hoursDivChild.querySelector('p:first-child').textContent
+                        const data = hours[hour][0]
+                        const date = day.textContent
+                        img.src = `http://openweathermap.org/img/wn/${data.icon}@4x.png`;
+                        img.addEventListener('load', () => {
+                            weatherSticker.innerHTML = `<img src="${img.src}" />`;
+                        })
+                        document.getElementById('time').innerText = `${date}: ${hour}`
+                        document.getElementById('temp').innerText = `${Math.round(data.temp)}  C`
+                        document.getElementById('humidity').innerText = `${data.humidity}  % humidity`
+                        document.getElementById('feelsLike').innerText = `Feels like ${Math.round(data.feels_like)} C`
+                        document.getElementById('description').innerText = `Description: ${data.description}`
+                    });
+                })
+            }
+      })
+    })
 }
 
 let favoriteCities = JSON.parse(localStorage.getItem('favoriteCities')) || [];
@@ -157,8 +162,8 @@ function displayFavoriteCities() {
 }
 displayFavoriteCities();
 
-document.querySelector('#addFavoriteButton').addEventListener('click', () => {
-    const cityName = document.querySelector('#locationName').innerText.split(',')[0].replace('You are currently in ', '');
+document.getElementById('addFavoriteButton').addEventListener('click', () => {
+    const cityName = document.getElementById('locationName').innerText.split(',')[0].replace('You are currently in ', '');
     if (!favoriteCities.includes(cityName)) {
         favoriteCities.push(cityName);
         addCityToList(cityName);
