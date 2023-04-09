@@ -9,8 +9,10 @@ let weather;
 let forecast;
 
 //LOCATION
-navigator.geolocation.getCurrentPosition(ifSucces, ifError)
-function ifSucces(position){
+window.addEventListener('load', function() {
+    navigator.geolocation.getCurrentPosition(ifSuccess, ifError);
+});
+function ifSuccess(position){
     const {latitude, longitude} = position.coords;
     weather = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}&units=metric`
     forecast = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${key}&units=metric`
@@ -20,7 +22,7 @@ function ifError(){
     alert(`Something didn't work well :(\nCheck if you allowed the website to access your location`);
 }
 locationButton.addEventListener('click', ()=> { 
-    navigator.geolocation.getCurrentPosition(ifSucces, ifError)
+    navigator.geolocation.getCurrentPosition(ifSuccess, ifError)
 })
 
 //SEARCH
@@ -46,12 +48,12 @@ function weatherData(data){
         document.getElementById('infoText').innerText = `${search.value} isn't a valid city name`;
         daysDiv.innerHTML = ''
     }else{
-        document.getElementById('locationName').innerText = `You are currently in ${data.name}, ${data.sys.country}`
+        document.getElementById('locationName').innerText = `${data.name}, ${data.sys.country}`
         document.getElementById('time').innerText = 'Now'
-        document.getElementById('temp').innerText = `${Math.round(data.main.temp)}  C`
-        document.getElementById('humidity').innerText = `${data.main.humidity}  % humidity`
-        document.getElementById('feelsLike').innerText = `Feels like ${Math.round(data.main.feels_like)} C`
-        document.getElementById('description').innerText = `Description: ${data.weather[0].description}`
+        document.getElementById('temp').innerText = `${Math.round(data.main.temp)}`
+        document.getElementById('humidity').innerText = `${data.main.humidity}`
+        document.getElementById('feelsLike').innerText = `${Math.round(data.main.feels_like)}`
+        document.getElementById('description').innerText = `${data.weather[0].description}`
         document.getElementById('weatherSticker').innerHTML = `<img src="http://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png" />`
         document.getElementById('infoText').innerText = ''
         
@@ -102,10 +104,10 @@ function forecastData(data) {
                             weatherSticker.innerHTML = `<img src="${img.src}" />`;
                         })
                         document.getElementById('time').innerText = `${dayOfWeek}: ${hour}`
-                        document.getElementById('temp').innerText = `${Math.round(data.temp)}  C`
-                        document.getElementById('humidity').innerText = `${data.humidity}  % humidity`
-                        document.getElementById('feelsLike').innerText = `Feels like ${Math.round(data.feels_like)} C`
-                        document.getElementById('description').innerText = `Description: ${data.description}`
+                        document.getElementById('temp').innerText = `${Math.round(data.temp)}`
+                        document.getElementById('humidity').innerText = `${data.humidity}`
+                        document.getElementById('feelsLike').innerText = `${Math.round(data.feels_like)}`
+                        document.getElementById('description').innerText = `${data.description}`
                     });
                 })
             }
@@ -153,4 +155,11 @@ document.getElementById('addFavoriteButton').addEventListener('click', () => {
         addCityToList(cityName);
         saveFavoriteCities();
     }
+})
+//THEMES
+document.getElementById('themeButton').addEventListener('click', () => {
+    const elements = document.querySelectorAll('*')
+    elements.forEach((element) => {
+        element.classList.toggle('dark')
+    })
 })

@@ -2,10 +2,18 @@
 *{
     font-family: 'Poppins', sans-serif;
 }
+body{
+    background-color: rgba(255, 255, 255, 0.959);
+}
+body.dark{
+    background-color: rgba(0, 0, 0, 0.959);
+    color: white;
+}
 #daysDiv{
     display: flex;
     justify-content: space-between;
     max-width: 1200px;
+    width: 800px;
 }
 #hoursDiv{
     display: flex;
@@ -21,20 +29,30 @@
 li{
     cursor: pointer;
 }
+#favoritesDiv{
+    display: flex;
+}
 #favoritesList{
     display: flex;
 }
 #weatherDiv{
-    background-color: #FFD700;
     width: 1500px;
     display: grid;
     justify-content: center;
     align-items: center;
+    margin: auto;
 }
 .favoriteCityDiv{
     display: flex;
     margin-right: 50px;
 }
 .weatherSticker{
-    max-width: 100px;
+    max-width: 60px;
+}
+#weatherSticker > img{
+    width: 120px;
+}
+#weatherSticker {
+    width: 120px;
+    height: 130px;
 }

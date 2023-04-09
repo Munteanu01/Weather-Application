@@ -11,18 +11,19 @@
     <input id="search" type="text" spellcheck="false" placeholder="Enter city name" autocomplete="off">
     <button id="locationButton">Location</button>
     <button id="addFavoriteButton">Add this city to favorites</button>
+    <button id="themeButton">Theme</button>
     <div id="favoritesDiv">
-        <p>Favorites</p>
+        <p>Favorites:</p>
         <ul id="favoritesList"></ul>
     </div>
     <section id="weatherDiv">
-        <p id="locationName"></p>
-        <p id="time"></p>
+        <p>You are currently in <span id="locationName"></span></p>
+        <p id="time">Now</p>
         <div id="weatherSticker"></div>
-        <p id="temp"></p>
-        <p id="humidity"></p>
-        <p id="feelsLike"></p>
-        <p id="description"></p>
+        <p><span id="temp"></span> C</p>
+        <p><span id="humidity"></span> % humidity</p>
+        <p>Feels like <span id="feelsLike"></span> C</p> 
+        <p>Description: <span id="description"></span></p>
         <div id="daysDiv"></div>
         <div id="hoursDiv"></div>
     </section>
