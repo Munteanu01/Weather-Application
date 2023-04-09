@@ -24,6 +24,13 @@ li{
 #favoritesList{
     display: flex;
 }
+#weatherDiv{
+    background-color: #FFD700;
+    width: 1500px;
+    display: grid;
+    justify-content: center;
+    align-items: center;
+}
 .favoriteCityDiv{
     display: flex;
     margin-right: 50px;

@@ -2,36 +2,21 @@ import { key } from './config.js';
 
 const daysDiv = document.getElementById('daysDiv')
 const hoursDiv = document.getElementById('hoursDiv')
-const loading = document.getElementById('loading')
 const locationButton = document.getElementById('locationButton') 
 const search = document.getElementById('search')
 const favoritesList = document.getElementById('favoritesList');
 let weather;
 let forecast;
 
-//LOADING
-function setLoading() {
-    loading.style.display = 'block';
-    hoursDiv.innerHTML = ''
-    daysDiv.innerHTML = ''
-    document.getElementById('weatherDiv').style.display = 'none';
-    document.getElementById('infoText').innerText = '';
-}
-function clearLoading() {
-    loading.style.display = 'none';
-}
-
 //LOCATION
 navigator.geolocation.getCurrentPosition(ifSucces, ifError)
 function ifSucces(position){
-    setLoading(); 
     const {latitude, longitude} = position.coords;
     weather = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}&units=metric`
     forecast = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${key}&units=metric`
     fetchData()
 }
 function ifError(){
-    clearLoading();
     alert(`Something didn't work well :(\nCheck if you allowed the website to access your location`);
 }
 locationButton.addEventListener('click', ()=> { 
@@ -53,16 +38,14 @@ function requestApi(city){
 
 //RESPONSE
 function fetchData(){
-    fetch(weather).then(response => response.json()).then(data => weatherData(data)).then(clearLoading());
+    fetch(weather).then(response => response.json()).then(data => weatherData(data));
     fetch(forecast).then(response => response.json()).then(data => forecastData(data));
 }
 function weatherData(data){
     if(data.cod == "404"){
         document.getElementById('infoText').innerText = `${search.value} isn't a valid city name`;
-        document.getElementById('weatherDiv').style.display = 'none';
         daysDiv.innerHTML = ''
     }else{
-        clearLoading();
         document.getElementById('locationName').innerText = `You are currently in ${data.name}, ${data.sys.country}`
         document.getElementById('time').innerText = 'Now'
         document.getElementById('temp').innerText = `${Math.round(data.main.temp)}  C`
@@ -71,16 +54,18 @@ function weatherData(data){
         document.getElementById('description').innerText = `Description: ${data.weather[0].description}`
         document.getElementById('weatherSticker').innerHTML = `<img src="http://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png" />`
         document.getElementById('infoText').innerText = ''
-        document.getElementById('weatherDiv').style.display = 'block';
+        
     }
     search.value = "";
 }
 function forecastData(data) {
     const groupedData = data.list.reduce((acc, item) => {
-        const [date, hour] = item.dt_txt.split(' ')
-        acc[date] = acc[date] || {}
-        acc[date][hour.slice(0, 5)] = acc[date][hour.slice(0, 5)] || []
-        acc[date][hour.slice(0, 5)].push({
+        const date = new Date(item.dt_txt)
+        const dayOfWeek = date.toLocaleDateString('en-US', { weekday: 'long' })
+        const hour = date.toLocaleTimeString('en-US', { hour: '2-digit', minute: '2-digit' })
+        acc[dayOfWeek] = acc[dayOfWeek] || {}
+        acc[dayOfWeek][hour] = acc[dayOfWeek][hour] || []
+        acc[dayOfWeek][hour].push({
             temp: Math.round(item.main.temp),
             humidity: item.main.humidity,
             feels_like: Math.round(item.main.feels_like),
@@ -89,8 +74,7 @@ function forecastData(data) {
         })
         return acc
     }, {})
-
-    daysDiv.innerHTML = Object.entries(groupedData).map(([date]) => `<p class="date">${date}</p>`).join('')
+    daysDiv.innerHTML = Object.keys(groupedData).map(dayOfWeek => `<p class="date">${dayOfWeek}</p>`).join('')
     daysDiv.querySelectorAll('.date').forEach(day => {
         day.addEventListener('click', () => {
             if (hoursDiv.dataset.selectedDay === day.textContent) {
@@ -112,12 +96,12 @@ function forecastData(data) {
                     hoursDivChild.addEventListener('click', () => {
                         const hour = hoursDivChild.querySelector('p:first-child').textContent
                         const data = hours[hour][0]
-                        const date = day.textContent
+                        const dayOfWeek = day.textContent
                         img.src = `http://openweathermap.org/img/wn/${data.icon}@4x.png`;
                         img.addEventListener('load', () => {
                             weatherSticker.innerHTML = `<img src="${img.src}" />`;
                         })
-                        document.getElementById('time').innerText = `${date}: ${hour}`
+                        document.getElementById('time').innerText = `${dayOfWeek}: ${hour}`
                         document.getElementById('temp').innerText = `${Math.round(data.temp)}  C`
                         document.getElementById('humidity').innerText = `${data.humidity}  % humidity`
                         document.getElementById('feelsLike').innerText = `Feels like ${Math.round(data.feels_like)} C`
@@ -125,7 +109,7 @@ function forecastData(data) {
                     });
                 })
             }
-      })
+        })
     })
 }
 
