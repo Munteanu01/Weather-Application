@@ -70,6 +70,7 @@ function weatherData(data){
         document.querySelector('#humidity').innerText = `${data.main.humidity}  % humidity`
         document.querySelector('#feelsLike').innerText = `Feels like ${Math.round(data.main.feels_like)} C`
         document.querySelector('#description').innerText = `Description: ${data.weather[0].description}`
+        document.querySelector('#weatherSticker').innerHTML = `   <img src="http://openweathermap.org/img/wn/${data.weather[0].icon}@4x.png" />`
         document.querySelector('#infoText').innerText = ''
         document.querySelector('#weatherDiv').style.display = 'block';
     }
@@ -83,7 +84,8 @@ function forecastData(data) {
       acc[date][hour.slice(0, 5)].push({temp: Math.round(item.main.temp), 
                                         humidity: item.main.humidity,
                                         feels_like: Math.round(item.main.feels_like),
-                                        description: item.weather[0].description})
+                                        description: item.weather[0].description,
+                                        icon: item.weather[0].icon})
       return acc
     }, {})
     
@@ -101,16 +103,22 @@ function forecastData(data) {
               </div>
             `).join('')
             hoursDiv.querySelectorAll('.hoursDivChildren').forEach(hoursDivChild => {
+                const weatherSticker = document.querySelector('#weatherSticker');
+                const img = document.createElement('img');
                 hoursDivChild.addEventListener('click', () => {
                     const hour = hoursDivChild.querySelector('p:first-child').textContent
                     const data = hours[hour][0]
                     const date = day.textContent
-                    document.querySelector('#time').innerText = `${date} - ${hour}`
+                    img.src = `http://openweathermap.org/img/wn/${data.icon}@4x.png`;
+                    img.addEventListener('load', () => {
+                        weatherSticker.innerHTML = `<img src="${img.src}" />`;
+                    })
+                    document.querySelector('#time').innerText = `${date}: ${hour}`
                     document.querySelector('#temp').innerText = `${Math.round(data.temp)}  C`
                     document.querySelector('#humidity').innerText = `${data.humidity}  % humidity`
                     document.querySelector('#feelsLike').innerText = `Feels like ${Math.round(data.feels_like)} C`
                     document.querySelector('#description').innerText = `Description: ${data.description}`
-                })
+                });
             })
         })
     })   
