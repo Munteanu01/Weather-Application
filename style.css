@@ -5,14 +5,26 @@
 #daysDiv{
     display: flex;
     justify-content: space-between;
+    max-width: 1200px;
 }
 #hoursDiv{
     display: flex;
     justify-content: space-between;
+    max-width: 1200px;
 }
 .date{
     cursor: pointer;
 }
 .hoursDivChildren{
     cursor: pointer;
+}
+li{
+    cursor: pointer;
+}
+#favoritesList{
+    display: flex;
+}
+.favoriteCityDiv{
+    display: flex;
+    margin-right: 50px;
 }

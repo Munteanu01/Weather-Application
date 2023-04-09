@@ -5,6 +5,7 @@ const hoursDiv = document.querySelector('#hoursDiv')
 const loading = document.querySelector('#loading')
 const locationButton = document.querySelector('#locationButton') 
 const search = document.querySelector('#search')
+const favoritesList = document.querySelector('#favoritesList');
 let weather;
 let forecast;
 
@@ -114,3 +115,45 @@ function forecastData(data) {
         })
     })   
 }
+
+let favoriteCities = JSON.parse(localStorage.getItem('favoriteCities')) || [];
+function saveFavoriteCities() {
+    localStorage.setItem('favoriteCities', JSON.stringify(favoriteCities));
+}
+
+function addCityToList(cityName) {
+    const favoriteCityDiv = document.createElement('div')
+    const li = document.createElement('li');
+    const deleteButton = document.createElement('button');
+    deleteButton.innerText = 'Remove';
+    li.innerText = cityName;
+    favoriteCityDiv.classList.add('favoriteCityDiv')
+    favoriteCityDiv.appendChild(li);
+    favoriteCityDiv.appendChild(deleteButton);
+    li.addEventListener('click', () => {
+        requestApi(cityName);
+    });
+    deleteButton.addEventListener('click', () => {
+        favoriteCities = favoriteCities.filter(city => city !== cityName);
+        favoritesList.removeChild(favoriteCityDiv);
+        saveFavoriteCities();
+    });
+    favoritesList.appendChild(favoriteCityDiv);
+}
+
+function displayFavoriteCities() {
+    favoritesList.innerHTML = '';
+    favoriteCities.forEach(city => {
+        addCityToList(city);
+    });
+}
+displayFavoriteCities();
+
+document.querySelector('#addFavoriteButton').addEventListener('click', () => {
+    const cityName = document.querySelector('#locationName').innerText.split(',')[0].replace('You are currently in ', '');
+    if (!favoriteCities.includes(cityName)) {
+        favoriteCities.push(cityName);
+        addCityToList(cityName);
+        saveFavoriteCities();
+    }
+})
