@@ -46,7 +46,7 @@ li{
     display: flex;
     margin-right: 50px;
 }
-.weatherSticker{
+.weatherStickers{
     max-width: 60px;
 }
 #weatherSticker > img{

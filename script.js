@@ -5,8 +5,11 @@ const hoursDiv = document.getElementById('hoursDiv')
 const locationButton = document.getElementById('locationButton') 
 const search = document.getElementById('search')
 const favoritesList = document.getElementById('favoritesList');
+const fButton = document.getElementById('fButton')
+const cButton = document.getElementById('cButton')
 let weather;
 let forecast;
+let units = 'metric';
 
 //LOCATION
 window.addEventListener('load', function() {
@@ -14,8 +17,8 @@ window.addEventListener('load', function() {
 });
 function ifSuccess(position){
     const {latitude, longitude} = position.coords;
-    weather = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}&units=metric`
-    forecast = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${key}&units=metric`
+    weather = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}`
+    forecast = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${key}`
     fetchData()
 }
 function ifError(){
@@ -32,16 +35,43 @@ search.addEventListener("keyup", e =>{
     }
 })
 function requestApi(city){
-    weather = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}&units=metric`;
-    forecast = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${key}&units=metric`; 
+    weather = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`;
+    forecast = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${key}`; 
     hoursDiv.innerHTML = ''
     fetchData();
 }
 
+//UNIT
+fButton.addEventListener('click', () => {
+    units = 'imperial';
+    const unitsElements = document.getElementsByClassName('unit');
+    for(let i = 0; i < unitsElements.length; i++){
+        unitsElements[i].innerText = 'F'
+    }
+    fButton.classList.add('active');
+    cButton.classList.remove('active');
+    updateUnits();
+});
+
+cButton.addEventListener('click', () => {
+    units = 'metric';
+    const unitsElements = document.getElementsByClassName('unit');
+    for(let i = 0; i < unitsElements.length; i++){
+        unitsElements[i].innerText = 'C';
+    }
+    cButton.classList.add('active');
+    fButton.classList.remove('active');
+    updateUnits();
+});
+
+function updateUnits() {
+    fetchData();
+    hoursDiv.innerHTML = ''
+}
 //RESPONSE
 function fetchData(){
-    fetch(weather).then(response => response.json()).then(data => weatherData(data));
-    fetch(forecast).then(response => response.json()).then(data => forecastData(data));
+    fetch(`${weather}&units=${units}`).then(response => response.json()).then(data => weatherData(data));
+    fetch(`${forecast}&units=${units}`).then(response => response.json()).then(data => forecastData(data));
 }
 function weatherData(data){
     if(data.cod == "404"){
@@ -87,8 +117,8 @@ function forecastData(data) {
                 hoursDiv.innerHTML = Object.entries(hours).map(([hour, data]) => `
                     <div class='hoursDivChildren'>
                         <p>${hour}</p>
-                        <img class="weatherSticker" src="http://openweathermap.org/img/wn/${data[0].icon}@4x.png" />
-                        <p>${data[0].temp}C</p>
+                        <img class="weatherStickers" src="http://openweathermap.org/img/wn/${data[0].icon}@4x.png" />
+                        <p>${data[0].temp} <span>${fButton.classList.contains('active') ? "F" : "C"}</span></p>
                     </div>
                 `).join('')
                 hoursDiv.dataset.selectedDay = day.textContent
