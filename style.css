@@ -2,10 +2,12 @@
 *{
     font-family: 'Poppins', sans-serif;
     margin: 0;
+    overflow-x: hidden;
 }
 body{
     background-color: rgba(0, 0, 0, 0.910);
     color: white;
+    max-width: 100vw;
 }
 body.light{
     color: black;
@@ -28,6 +30,7 @@ body.light{
 }
 #logoDiv{
     width: 158px;
+    margin-top: 5px;
 }
 #logo{
     width: 70px;
@@ -202,7 +205,7 @@ input[type="text"]:focus {
     right: 0;
 }
 #favoritesHeader{
-    margin-left: 45px;
+    margin-left: 40px;
     font-size: 1.4rem;
     font-weight: 600;
 }
@@ -229,7 +232,6 @@ input[type="text"]:focus {
 ul{
     list-style: none;
 }
-
 li{
     cursor: pointer;
 }
@@ -275,4 +277,140 @@ li{
     to {
         transform: rotate(150deg);
     }
+}
+
+
+
+
+
+
+
+@media(max-width: 1427px){
+#mainDiv{
+    max-width: 700px;
+    margin: auto;
+}
+/*NAVBAR*/
+#nav{
+    max-width: 620px;
+    margin: auto;
+}
+
+/*FORECAST*/
+#daysDiv{
+    display: flex;
+    margin: auto;
+    justify-content: center;
+    padding: 0;
+    max-width: 800px;
+}
+.dayContainer{
+    margin: 0 20px;
+}
+#hoursDiv{
+    margin: auto;
+    display: grid;
+    justify-content: center;
+    grid-template-columns: 1fr 1fr 1fr 1fr;
+    margin-top: 20px;
+    margin-bottom: 20px;
+    max-width: 500px;
+}
+.hoursDivChildren{
+    cursor: pointer;
+    margin: 20px 10px;
+    padding: 7px 13px;
+    border: 2px #EB6E4B solid;
+    border-radius: 7%;
+}
+
+/*FAVORITES*/
+#favoritesDiv{
+    margin: 50px auto;
+    display: none;
+    justify-content: center;
+    position: static;
+    max-width: 600px;
+}
+#favoritesHeader{
+    margin: auto;
+}
+ul{
+    list-style: none;
+    display: flex;
+    flex-wrap: wrap;
+    padding: 0;
+    justify-content: center;
+}
+#addFavoritesButton{
+    margin: 20px auto;
+    padding: 5px 39px ;
+}
+.favoriteCityDiv{
+    margin: 10px 10px ;
+}
+}
+
+
+@media(max-width: 672px){
+#mainDiv{
+    max-width: 600px;
+}
+/*NAVBAR*/
+#nav{
+    margin: 20px 40px 100px 40px;
+}
+#logoDiv{
+    display: none;
+}
+input[type="text"] {
+    width: 150px;
+}
+
+#feelsLikeAndHumidityDiv{
+    display: grid;
+    justify-content: center;
+    gap: 15px;
+}
+
+/*FORECAST*/
+#daysDiv{
+    flex-wrap: wrap;
+    margin: 20px 50px;
+}
+.dayContainer{
+    margin-top: 20px
+}
+#hoursDiv{
+    grid-template-columns: 1fr 1fr ;
+    max-width: 250px;
+}
+}
+
+
+@media(max-width: 410px){
+/*NAVBAR*/
+#nav{
+    flex-wrap: wrap;
+    justify-content: center;
+    margin: 40px auto;
+    padding: 0 40px;
+}
+#logoDiv{
+    display: none;
+}
+input[type="text"] {
+    width: 150px;
+}
+#buttonsDiv{
+    margin-top: 20px;
+}
+
+
+
+
+/*FORECAST*/
+#daysDiv{
+    display: block;
+}
 }
