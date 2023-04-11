@@ -56,3 +56,6 @@ li{
     width: 120px;
     height: 130px;
 }
+#loading{
+    display: none;
+}

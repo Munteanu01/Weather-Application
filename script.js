@@ -7,12 +7,16 @@ const search = document.getElementById('search')
 const favoritesList = document.getElementById('favoritesList');
 const fButton = document.getElementById('fButton')
 const cButton = document.getElementById('cButton')
+const weatherDiv = document.getElementById('weatherDiv')
+const loading = document.getElementById('loading')
 let weather;
 let forecast;
 let units = 'metric';
 
 //LOCATION
 window.addEventListener('load', function() {
+    loading.style.display = "block";  
+    weatherDiv.style.display = "none"; 
     navigator.geolocation.getCurrentPosition(ifSuccess, ifError);
 });
 function ifSuccess(position){
@@ -25,6 +29,8 @@ function ifError(){
     alert(`Something didn't work well :(\nCheck if you allowed the website to access your location`);
 }
 locationButton.addEventListener('click', ()=> { 
+    loading.style.display = "block"; 
+    weatherDiv.style.display = "none"; 
     navigator.geolocation.getCurrentPosition(ifSuccess, ifError)
 })
 
@@ -52,7 +58,6 @@ fButton.addEventListener('click', () => {
     cButton.classList.remove('active');
     updateUnits();
 });
-
 cButton.addEventListener('click', () => {
     units = 'metric';
     const unitsElements = document.getElementsByClassName('unit');
@@ -63,13 +68,15 @@ cButton.addEventListener('click', () => {
     fButton.classList.remove('active');
     updateUnits();
 });
-
 function updateUnits() {
     fetchData();
     hoursDiv.innerHTML = ''
 }
+
 //RESPONSE
 function fetchData(){
+    loading.style.display = "none";  
+    weatherDiv.style.display = "block"; 
     fetch(`${weather}&units=${units}`).then(response => response.json()).then(data => weatherData(data));
     fetch(`${forecast}&units=${units}`).then(response => response.json()).then(data => forecastData(data));
 }
