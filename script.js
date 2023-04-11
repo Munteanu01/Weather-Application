@@ -51,8 +51,8 @@ function ifSuccess(position){
     fetchData()
 }
 function ifError(){
+    requestApi("Bucharest")
     removeLoading()
-    mainDiv.style.display = "none";
     alert(`Something didn't work well :(\nCheck if you allowed the website to access your location`);
 }
 locationButton.addEventListener('click', ()=> { 
