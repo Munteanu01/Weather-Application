@@ -8,12 +8,14 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <input id="search" type="text" spellcheck="false" placeholder="Enter city name" autocomplete="off">
-    <button id="locationButton">Location</button>
-    <button id="addFavoriteButton">Add this city to favorites</button>
-    <button id="themeButton">Theme</button>
-    <button id="fButton">F</button>
-    <button id="cButton">C</button>
+    <nav id="nav">
+        <input id="search" type="text" spellcheck="false" placeholder="Enter city name" autocomplete="off">
+        <button id="locationButton">Location</button>
+        <button id="addFavoriteButton">Add this city to favorites</button>
+        <button id="themeButton">Theme</button>
+        <button id="fButton">F</button>
+        <button id="cButton">C</button>
+    </nav>
     <p id="infoText"></p>
     <div id="favoritesDiv">
         <p>Favorites:</p>
@@ -30,10 +32,12 @@
         <div id="daysDiv"></div>
         <div id="hoursDiv"></div>
     </section>
-    <p id="loading">Loading, please wait....</p>
+    <div id="loading">
+        <img src="img/view.gif" alt="">
+    </div>
    
 
-    
+
     <script src="script.js" type="module"></script>
 </body>
 </html>

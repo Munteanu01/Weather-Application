@@ -8,16 +8,43 @@ const favoritesList = document.getElementById('favoritesList');
 const fButton = document.getElementById('fButton')
 const cButton = document.getElementById('cButton')
 const weatherDiv = document.getElementById('weatherDiv')
+const favoritesDiv = document.getElementById('favoritesDiv')
 const loading = document.getElementById('loading')
+const nav = document.getElementById('nav')
 let weather;
 let forecast;
 let units = 'metric';
+let loadingTimer;
+let isLoading = false;
 
+//LOADING
+function addLoading() {
+    isLoading = true;
+    loadingTimer = setTimeout(() => {
+      if (isLoading) {
+        loading.style.display = "flex";
+        weatherDiv.style.display = "none";
+        favoritesDiv.style.display = "none";
+        nav.style.display = "none";
+      }
+    }, 300);
+  }
+  
+  function removeLoading() {
+    isLoading = false;
+    clearTimeout(loadingTimer);
+    loading.style.display = "none";
+    weatherDiv.style.display = "block";
+    favoritesDiv.style.display = "flex";
+    nav.style.display = "flex";
+  }
 //LOCATION
 window.addEventListener('load', function() {
-    loading.style.display = "block";  
-    weatherDiv.style.display = "none"; 
+    weatherDiv.style.display = "none";
+    favoritesDiv.style.display = "none"
+    nav.style.display = "none";
     navigator.geolocation.getCurrentPosition(ifSuccess, ifError);
+    addLoading()
 });
 function ifSuccess(position){
     const {latitude, longitude} = position.coords;
@@ -26,11 +53,12 @@ function ifSuccess(position){
     fetchData()
 }
 function ifError(){
+    removeLoading()
+    weatherDiv.style.display = "none";
     alert(`Something didn't work well :(\nCheck if you allowed the website to access your location`);
 }
 locationButton.addEventListener('click', ()=> { 
-    loading.style.display = "block"; 
-    weatherDiv.style.display = "none"; 
+    addLoading()
     navigator.geolocation.getCurrentPosition(ifSuccess, ifError)
 })
 
@@ -75,8 +103,7 @@ function updateUnits() {
 
 //RESPONSE
 function fetchData(){
-    loading.style.display = "none";  
-    weatherDiv.style.display = "block"; 
+    removeLoading()
     fetch(`${weather}&units=${units}`).then(response => response.json()).then(data => weatherData(data));
     fetch(`${forecast}&units=${units}`).then(response => response.json()).then(data => forecastData(data));
 }
