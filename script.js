@@ -7,7 +7,7 @@ const search = document.getElementById('search')
 const favoritesList = document.getElementById('favoritesList');
 const fButton = document.getElementById('fButton')
 const cButton = document.getElementById('cButton')
-const weatherDiv = document.getElementById('weatherDiv')
+const mainDiv = document.getElementById('mainDiv')
 const favoritesDiv = document.getElementById('favoritesDiv')
 const loading = document.getElementById('loading')
 const nav = document.getElementById('nav')
@@ -21,12 +21,12 @@ let isLoading = false;
 function addLoading() {
     isLoading = true;
     loadingTimer = setTimeout(() => {
-      if (isLoading) {
-        loading.style.display = "flex";
-        weatherDiv.style.display = "none";
-        favoritesDiv.style.display = "none";
-        nav.style.display = "none";
-      }
+        if (isLoading) {
+            loading.style.display = "flex";
+            mainDiv.style.display = "none";
+            favoritesDiv.style.display = "none";
+            nav.style.display = "none";
+        }
     }, 300);
   }
   
@@ -34,13 +34,13 @@ function addLoading() {
     isLoading = false;
     clearTimeout(loadingTimer);
     loading.style.display = "none";
-    weatherDiv.style.display = "block";
-    favoritesDiv.style.display = "flex";
+    mainDiv.style.display = "block";
+    favoritesDiv.style.display = "grid";
     nav.style.display = "flex";
   }
 //LOCATION
 window.addEventListener('load', function() {
-    weatherDiv.style.display = "none";
+    mainDiv.style.display = "none";
     favoritesDiv.style.display = "none"
     nav.style.display = "none";
     navigator.geolocation.getCurrentPosition(ifSuccess, ifError);
@@ -54,7 +54,7 @@ function ifSuccess(position){
 }
 function ifError(){
     removeLoading()
-    weatherDiv.style.display = "none";
+    mainDiv.style.display = "none";
     alert(`Something didn't work well :(\nCheck if you allowed the website to access your location`);
 }
 locationButton.addEventListener('click', ()=> { 
@@ -80,7 +80,7 @@ fButton.addEventListener('click', () => {
     units = 'imperial';
     const unitsElements = document.getElementsByClassName('unit');
     for(let i = 0; i < unitsElements.length; i++){
-        unitsElements[i].innerText = 'F'
+        unitsElements[i].innerText = 'F°'
     }
     fButton.classList.add('active');
     cButton.classList.remove('active');
@@ -90,7 +90,7 @@ cButton.addEventListener('click', () => {
     units = 'metric';
     const unitsElements = document.getElementsByClassName('unit');
     for(let i = 0; i < unitsElements.length; i++){
-        unitsElements[i].innerText = 'C';
+        unitsElements[i].innerText = 'C°';
     }
     cButton.classList.add('active');
     fButton.classList.remove('active');
@@ -110,7 +110,6 @@ function fetchData(){
 function weatherData(data){
     if(data.cod == "404"){
         document.getElementById('infoText').innerText = `${search.value} isn't a valid city name`;
-        daysDiv.innerHTML = ''
     }else{
         document.getElementById('locationName').innerText = `${data.name}, ${data.sys.country}`
         document.getElementById('time').innerText = 'Now'
@@ -140,8 +139,20 @@ function forecastData(data) {
         })
         return acc
     }, {})
-    daysDiv.innerHTML = Object.keys(groupedData).map(dayOfWeek => `<p class="date">${dayOfWeek}</p>`).join('')
-    daysDiv.querySelectorAll('.date').forEach(day => {
+    daysDiv.innerHTML = Object.entries(groupedData).map(([dayOfWeek, dayData]) => {
+        const temperatures = [].concat(...Object.values(dayData).map(hourData => hourData.map(hour => hour.temp)))
+        return `
+          <div class="dayContainer">
+            <p class="days">${dayOfWeek}</p>
+            <p class="min-max-temp">
+                ${Math.min(...temperatures)} ${units === 'imperial' ? 'F' : 'C'}° 
+                     <span class="dayTempSpan">|</span> 
+                ${Math.max(...temperatures)} ${units === 'imperial' ? 'F' : 'C'}°
+            </p>
+          </div>
+        `
+    }).join('')
+    daysDiv.querySelectorAll('.days').forEach(day => {
         day.addEventListener('click', () => {
             if (hoursDiv.dataset.selectedDay === day.textContent) {
                 hoursDiv.innerHTML = ''
@@ -152,7 +163,7 @@ function forecastData(data) {
                     <div class='hoursDivChildren'>
                         <p>${hour}</p>
                         <img class="weatherStickers" src="http://openweathermap.org/img/wn/${data[0].icon}@4x.png" />
-                        <p>${data[0].temp} <span>${fButton.classList.contains('active') ? "F" : "C"}</span></p>
+                        <p>${data[0].temp} <span class="hourTempUnit">${fButton.classList.contains('active') ? "F°" : "C°"}</span></p>
                     </div>
                 `).join('')
                 hoursDiv.dataset.selectedDay = day.textContent
@@ -167,7 +178,7 @@ function forecastData(data) {
                         img.addEventListener('load', () => {
                             weatherSticker.innerHTML = `<img src="${img.src}" />`;
                         })
-                        document.getElementById('time').innerText = `${dayOfWeek}: ${hour}`
+                        document.getElementById('time').innerText = `${dayOfWeek} ${hour}`
                         document.getElementById('temp').innerText = `${Math.round(data.temp)}`
                         document.getElementById('humidity').innerText = `${data.humidity}`
                         document.getElementById('feelsLike').innerText = `${Math.round(data.feels_like)}`
@@ -179,17 +190,18 @@ function forecastData(data) {
     })
 }
 
+//FAVORITES
 let favoriteCities = JSON.parse(localStorage.getItem('favoriteCities')) || [];
 function saveFavoriteCities() {
     localStorage.setItem('favoriteCities', JSON.stringify(favoriteCities));
 }
-
 function addCityToList(cityName) {
     const favoriteCityDiv = document.createElement('div')
     const li = document.createElement('li');
-    const deleteButton = document.createElement('button');
-    deleteButton.innerText = 'Remove';
+    const deleteButton = document.createElement('div');
+    deleteButton.classList.add('deleteButtons')
     li.innerText = cityName;
+    li.classList.add('favoriteCityNames')
     favoriteCityDiv.classList.add('favoriteCityDiv')
     favoriteCityDiv.appendChild(li);
     favoriteCityDiv.appendChild(deleteButton);
@@ -203,7 +215,6 @@ function addCityToList(cityName) {
     });
     favoritesList.appendChild(favoriteCityDiv);
 }
-
 function displayFavoriteCities() {
     favoritesList.innerHTML = '';
     favoriteCities.forEach(city => {
@@ -211,19 +222,19 @@ function displayFavoriteCities() {
     });
 }
 displayFavoriteCities();
-
-document.getElementById('addFavoriteButton').addEventListener('click', () => {
-    const cityName = document.getElementById('locationName').innerText.split(',')[0].replace('You are currently in ', '');
+document.getElementById('addFavoritesButton').addEventListener('click', () => {
+    const cityName = document.getElementById('locationName').innerText.split(',')[0];
     if (!favoriteCities.includes(cityName)) {
         favoriteCities.push(cityName);
         addCityToList(cityName);
         saveFavoriteCities();
     }
 })
+
 //THEMES
 document.getElementById('themeButton').addEventListener('click', () => {
     const elements = document.querySelectorAll('*')
     elements.forEach((element) => {
-        element.classList.toggle('dark')
+        element.classList.toggle('light')
     })
 })

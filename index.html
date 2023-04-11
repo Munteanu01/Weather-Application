@@ -8,32 +8,40 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
-    <nav id="nav">
-        <input id="search" type="text" spellcheck="false" placeholder="Enter city name" autocomplete="off">
-        <button id="locationButton">Location</button>
-        <button id="addFavoriteButton">Add this city to favorites</button>
-        <button id="themeButton">Theme</button>
-        <button id="fButton">F</button>
-        <button id="cButton">C</button>
-    </nav>
-    <p id="infoText"></p>
-    <div id="favoritesDiv">
-        <p>Favorites:</p>
-        <ul id="favoritesList"></ul>
-    </div>
-    <section id="weatherDiv">
-        <p>You are currently in <span id="locationName"></span></p>
-        <p id="time">Now</p>
-        <div id="weatherSticker"></div>
-        <p><span id="temp"></span> <span class="unit">C</span></p>
-        <p><span id="humidity"></span> % humidity</p>
-        <p>Feels like <span id="feelsLike"></span> <span class="unit">C</span></p> 
-        <p>Description: <span id="description"></span></p>
+    <section id="mainDiv">
+        <nav id="nav">
+            <div id="logoDiv"><img id="logo" src="/img/climate (2).png" alt=""></div>
+            <input id="search" type="text" spellcheck="false" placeholder="Search for a city" autocomplete="off">
+            <div id="buttonsDiv">
+                <div id="locationButton"></div>
+                <div id="themeButton"></div>
+                <button id="fButton">°F</button>
+                <button id="cButton">°C</button>
+            </div>
+        </nav>
+        <p id="infoText"></p>
+        <div id="detailsDiv">
+            <p id="locationName"></p>
+            <p id="time">Now</p>
+            <div id="weatherSticker"></div>
+            <div id="tempDiv"><span id="temp"></span> <span class="unit">C°</span></div>
+            <p id="description"></p>
+            <div id="feelsLikeAndHumidityDiv">
+                <div id="feelsLikeDiv"><img src="/img/thermometer.png" alt=""> Feels like <span id="feelsLike"></span> <span class="unit">C°</span></div> 
+                <div id="humidityDiv"><img src="/img/water-drop.png" alt=""><span id="humidity"></span> % humidity</div>
+            </div>
+        </div>
         <div id="daysDiv"></div>
         <div id="hoursDiv"></div>
     </section>
+    <div id="favoritesDiv">
+        <p id="favoritesHeader">FAVORITES</p>
+        <button id="addFavoritesButton">ADD</button>
+        <ul id="favoritesList"></ul>
+    </div>
     <div id="loading">
-        <img src="img/view.gif" alt="">
+        <img id="loadingMap" src="img/loading.png" alt="">
+        <img id="loadingCircle" src="img/circle (1).png" alt="">
     </div>
    
 

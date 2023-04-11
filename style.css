@@ -4,71 +4,275 @@
     margin: 0;
 }
 body{
-    background-color: rgba(255, 255, 255, 0.959);
-}
-body.dark{
-    background-color: rgba(0, 0, 0, 0.959);
+    background-color: rgba(0, 0, 0, 0.910);
     color: white;
 }
-#daysDiv{
-    display: flex;
-    justify-content: space-between;
-    max-width: 1200px;
-    width: 800px;
+body.light{
+    color: black;
+    background-color: rgba(255, 255, 255, 0.959);
 }
-#hoursDiv{
-    display: flex;
-    justify-content: space-between;
-    max-width: 1200px;
-}
-.date{
-    cursor: pointer;
-}
-.hoursDivChildren{
-    cursor: pointer;
-}
-li{
-    cursor: pointer;
-}
-#nav{
-    display: none;
-}
-#favoritesDiv{
-    display: none;
-}
-#favoritesList{
-    display: flex;
-}
-#weatherDiv{
-    width: 1500px;
+#mainDiv{
+    max-width: 1000px;
     display: grid;
     justify-content: center;
     align-items: center;
-    margin: auto;
+    margin: 20px auto 0 auto;
     display: none;
 }
-.favoriteCityDiv{
+
+/*NAVBAR*/
+#nav{
+    display: none;
+    justify-content: space-between;
+    align-items: center;
+}
+#logoDiv{
+    width: 158px;
+}
+#logo{
+    width: 70px;
+}
+input[type="text"] {
+    padding: 5px;
+    border: none;
+}
+input[type="text"].light {
+    background-color: #e4e4e4;
+}
+input[type="text"]:focus {
+    outline: none;
+}
+#buttonsDiv{
     display: flex;
-    margin-right: 50px;
+    align-items: center;
 }
-.weatherStickers{
-    max-width: 60px;
+#locationButton{
+    margin-right: 20px;
+    width: 27px;
+    height: 28px;
+    background-position: center;
+    background-size: cover;
+    background-image: url('/img/location\ \(1).png');
+    cursor: pointer;
 }
+#themeButton{
+    margin-right: 10px;
+    width: 30px;
+    height: 30px;
+    background-position: center;
+    background-size: cover;
+    background-image: url('/img/sun.png');
+    cursor: pointer;
+}
+#themeButton.light{
+    background-image: url('/img/crescent-moon.png');
+}
+#fButton, #cButton{
+    color: white;
+    font-size: 1.4rem;
+    background: none;
+    outline: none;
+    border: none;
+}
+#fButton.active, #cButton.active{
+    color: #EB6E4B;
+    outline: none;
+    border: none;
+}
+#fButton.light, #cButton.light{
+    color: black;
+}
+
+
+
+
+/*DETAILS-DIV*/
 #weatherSticker > img{
     width: 120px;
 }
 #weatherSticker {
     width: 120px;
     height: 130px;
+    margin: auto;
 }
+#feelsLikeDiv > img{
+    width: 30px;
+}
+#feelsLikeDiv, #humidityDiv{
+    display: flex;
+    align-items: center;
+    font-size: 1.1rem;
+}
+#humidityDiv > img{
+    width: 28px;
+}
+#feelsLikeAndHumidityDiv{
+    width: 350px;
+    display: flex;
+    justify-content: space-between;
+}
+#detailsDiv{
+    display: grid;
+    margin: 10px auto 50px auto;
+    justify-content: center;
+}
+#feelsLike{
+    margin: 0 3px 0 5px;
+}
+#locationName {
+    margin: auto;
+    font-size:1.8rem;
+}
+#time{
+    margin: auto;
+    font-size:1.3rem;
+}
+#humidity{
+    margin: 0 5px 0 0;
+}
+#description{
+    margin: 20px auto;
+    font-size: 1.4rem;
+}
+#tempDiv{
+    margin: auto;
+    font-size: 2rem;
+}
+
+
+
+
+
+/*FORECAST*/
+#daysDiv{
+    display: flex;
+    justify-content: space-between;
+    max-width: 1000px;
+}
+.dayContainer > p{
+    display: flex;
+    justify-content: center;
+}
+.days{
+    cursor: pointer;
+}
+.dayTempSpan{
+    margin: 0 4px;
+    color: #EB6E4B;
+}
+#hoursDiv{
+    display: flex;
+    justify-content: center;
+    margin-top: 20px;
+    margin-bottom: 20px;
+}
+.hourTempUnit{
+    margin-left: 5px;
+}
+.hoursDivChildren{
+    cursor: pointer;
+    margin: 0 10px;
+    padding: 7px 13px;
+    border: 2px #EB6E4B solid;
+    border-radius: 7%;
+}
+.hoursDivChildren > p{
+    display: flex;
+    justify-content: center;
+}
+.hoursDivChildren > img{
+    display: flex;
+    margin: auto;
+}
+.weatherStickers{
+    max-width: 60px;
+}
+
+
+
+
+
+/*FAVORITES*/
+#favoritesDiv{
+    margin: 50px 50px;
+    display: none;
+    position: absolute;
+    justify-content: center;
+    top: 0;
+    right: 0;
+}
+#favoritesHeader{
+    margin-left: 45px;
+    font-size: 1.4rem;
+    font-weight: 600;
+}
+.favoriteCityDiv{
+    display: flex;
+    margin-top: 10px;
+    padding: 7px 5px;
+    justify-content: space-between;
+    background-color: #48484A;
+    color: white;
+}
+#addFavoritesButton{
+    border: none;
+    cursor: pointer;
+    font-size: 1.2rem;
+    font-weight: 600;
+    margin-top: 10px;
+    margin-left: 40px;
+    padding: 7px 5px;
+    justify-content: space-between;
+    background-color: #48484A;
+    color: white;
+}
+ul{
+    list-style: none;
+}
+
+li{
+    cursor: pointer;
+}
+.deleteButtons{
+    width: 15px;
+    height: 15px;
+    margin: 5px 0 0 10px;
+    background-position: center;
+    background-size: cover;
+    background-image: url('/img/close.png');
+    cursor: pointer;
+}
+
+
+
+
+/*LOADING*/
 #loading{
     display: none;
+    position: relative;
     justify-content: center;
     align-items: center;
-    height: 100vh;
+    height: 90vh;
+    padding-bottom: 10vh;
+    background-color: #48484A;
+}
+#loadingMap{
+    max-width: 120px;
+    position: absolute;
+}
+#loadingCircle{
+    max-width: 220px;
+    position: absolute;
+    animation: rotate 2s linear infinite;
+}
+#loading.light{
     background-color: white;
 }
-#loading > img{
-    max-width: 200px;
-    padding-bottom: 10vh;
+@keyframes rotate{
+    from {
+        transform: rotate(0deg);
+    }
+    to {
+        transform: rotate(150deg);
+    }
 }
