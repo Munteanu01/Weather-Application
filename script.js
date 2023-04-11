@@ -1,5 +1,3 @@
-import { key } from './config.js';
-
 const daysDiv = document.getElementById('daysDiv')
 const hoursDiv = document.getElementById('hoursDiv')
 const locationButton = document.getElementById('locationButton') 
@@ -48,8 +46,8 @@ window.addEventListener('load', function() {
 });
 function ifSuccess(position){
     const {latitude, longitude} = position.coords;
-    weather = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=${key}`
-    forecast = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=${key}`
+    weather = `https://api.openweathermap.org/data/2.5/weather?lat=${latitude}&lon=${longitude}&appid=494c1b3829722d3efcca1388b6d32b69`
+    forecast = `https://api.openweathermap.org/data/2.5/forecast?lat=${latitude}&lon=${longitude}&appid=494c1b3829722d3efcca1388b6d32b69`
     fetchData()
 }
 function ifError(){
@@ -69,8 +67,8 @@ search.addEventListener("keyup", e =>{
     }
 })
 function requestApi(city){
-    weather = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=${key}`;
-    forecast = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=${key}`; 
+    weather = `https://api.openweathermap.org/data/2.5/weather?q=${city}&appid=494c1b3829722d3efcca1388b6d32b69`;
+    forecast = `https://api.openweathermap.org/data/2.5/forecast?q=${city}&appid=494c1b3829722d3efcca1388b6d32b69`; 
     hoursDiv.innerHTML = ''
     fetchData();
 }
