@@ -224,7 +224,9 @@ input[type="text"]:focus {
 .weatherStickers{
     max-width: 60px;
 }
-
+.selectedDay{
+    color: #EB6E4B;
+}
 
 
 

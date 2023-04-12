@@ -160,6 +160,12 @@ function forecastData(data) {
     }).join('')
     daysDiv.querySelectorAll('.days').forEach(day => {
         day.addEventListener('click', () => {
+            day.classList.toggle('selectedDay')
+            daysDiv.querySelectorAll('.days').forEach(otherDay => {
+                if (otherDay !== day) {
+                    otherDay.classList.remove('selectedDay')
+                }
+            })
             if (hoursDiv.dataset.selectedDay === day.textContent) {
                 hoursDiv.innerHTML = ''
                 hoursDiv.dataset.selectedDay = ''
@@ -212,6 +218,10 @@ function addCityToList(cityName) {
     li.innerText = cityName;
     li.classList.add('favoriteCityNames')
     favoriteCityDiv.classList.add('favoriteCityDiv')
+    if (document.documentElement.classList.contains('light')) {
+        favoriteCityDiv.classList.add('light');
+        document.getElementById('addFavoritesButton').classList.add('light');
+    }
     favoriteCityDiv.appendChild(li);
     favoriteCityDiv.appendChild(deleteButton);
     li.addEventListener('click', () => {
