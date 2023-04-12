@@ -36,6 +36,8 @@ function addLoading() {
     favoritesDiv.style.display = "grid";
     nav.style.display = "flex";
   }
+
+
 //LOCATION
 window.addEventListener('load', function() {
     mainDiv.style.display = "none";
@@ -60,6 +62,8 @@ locationButton.addEventListener('click', ()=> {
     navigator.geolocation.getCurrentPosition(ifSuccess, ifError)
 })
 
+
+
 //SEARCH
 search.addEventListener("keyup", e =>{
     if(e.key == "Enter" && search.value != ""){
@@ -72,6 +76,8 @@ function requestApi(city){
     hoursDiv.innerHTML = ''
     fetchData();
 }
+
+
 
 //UNIT
 fButton.addEventListener('click', () => {
@@ -98,6 +104,8 @@ function updateUnits() {
     fetchData();
     hoursDiv.innerHTML = ''
 }
+
+
 
 //RESPONSE
 function fetchData(){
@@ -188,6 +196,9 @@ function forecastData(data) {
     })
 }
 
+
+
+
 //FAVORITES
 let favoriteCities = JSON.parse(localStorage.getItem('favoriteCities')) || [];
 function saveFavoriteCities() {
@@ -228,6 +239,8 @@ document.getElementById('addFavoritesButton').addEventListener('click', () => {
         saveFavoriteCities();
     }
 })
+
+
 
 //THEMES
 document.getElementById('themeButton').addEventListener('click', () => {
